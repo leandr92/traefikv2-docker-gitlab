@@ -3,7 +3,7 @@ version: "3.5"
 services:
   reverse-proxy:
     container_name: reverse-proxy
-    image: traefik:v2.1
+    image: traefik:v2.9
     restart: always
     command:
       - --entrypoints.web.address=:80
@@ -23,11 +23,11 @@ services:
       traefik-proxy:
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock:ro
-      - ./letsencrypt/acme.json:/acme.json
+      - ./traefik-certificates:/etc/traefik/acme
     labels:
       - traefik.enable=true
       # Secure dashboard
-      - traefik.http.routers.traefik.rule=Host(${TRAEFIK_DOMAIN})
+      - traefik.http.routers.traefik.rule=Host(`traefik.gitlab.dev-ins.ru`)
       - traefik.http.routers.traefik.service=api@internal
       # ENABLE THIS FOR BASIC AUTH
       #- traefik.http.routers.traefik.middlewares=admin
